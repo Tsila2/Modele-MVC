@@ -47,7 +47,8 @@ class CarController extends Controller
 
     public function carlist()
     {
-        $cars = $this->carModel->getCarList();
+        $url = BASE_URL.'api/carlist';
+        $cars = $this->fetchCarDataFromApi($url);
         $this->view('car/list', ['cars' => $cars]);
     }
 
@@ -93,5 +94,32 @@ class CarController extends Controller
         }
     }
 
+    /**
+     * Fetches car data from the given API URL.
+     *
+     * This method initializes a cURL session, sets the URL, and retrieves the data.
+     * If an error occurs during the cURL execution, it will be displayed.
+     * The method returns the decoded JSON response as an associative array.
+     *
+     * @param string $url The API URL to fetch car data from.
+     * @return array|null The decoded JSON response as an associative array, or null on failure.
+     */
+    public function fetchCarDataFromApi($url)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $output = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+
+        curl_close($ch);
+
+        return json_decode($output, true);
+    }
 
 }
