@@ -15,6 +15,10 @@ class CarController extends Controller
     }
     public function index()
     {
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            header('location:' . BASE_URL . 'home?msg=2');
+        }
         $this->view('car/index');
     }
 
@@ -50,7 +54,7 @@ class CarController extends Controller
     public function update($id)
     {
         $car = $this->carModel->getCarById($id);
-      $types= $this->carModel->getCarListType();
+        $types = $this->carModel->getCarListType();
         $this->view('car/modif', ['car' => $car, 'types' => $types]);
     }
 
@@ -89,5 +93,5 @@ class CarController extends Controller
         }
     }
 
-    
+
 }
