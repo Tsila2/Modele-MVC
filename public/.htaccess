@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Allow access to existing files and directories without redirection
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
